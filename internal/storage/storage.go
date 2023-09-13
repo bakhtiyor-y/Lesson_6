@@ -121,8 +121,5 @@ func (c *Conn) Open() error {
 }
 
 func (c *Conn) IsClose() bool {
-	if c.val {
-		return false
-	}
-	return true
+	return !(c.val)
 }

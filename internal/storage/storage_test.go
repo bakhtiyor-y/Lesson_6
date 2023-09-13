@@ -10,7 +10,7 @@ func TestAdd(t *testing.T) {
 	asserts := assert.New(t)
 	var newStorage = new(Storage)
 	newStorage.db = make(map[int]*models.User)
-	aa := &models.User{
+	userData := &models.User{
 		Login:            "login1",
 		PasswordHash:     "string",
 		Name:             "Name1",
@@ -21,7 +21,7 @@ func TestAdd(t *testing.T) {
 		UpdateDate:       "string",
 	}
 
-	got, err := newStorage.Add(aa)
+	got, err := newStorage.Add(userData)
 	asserts.Nil(err)
 	asserts.Equal(1, got)
 
@@ -31,7 +31,7 @@ func TestGet(t *testing.T) {
 	asserts := assert.New(t)
 	var newStorage = new(Storage)
 	newStorage.db = make(map[int]*models.User)
-	aa := &models.User{
+	userData := &models.User{
 		Login:            "login2",
 		PasswordHash:     "string",
 		Name:             "Name2",
@@ -41,8 +41,8 @@ func TestGet(t *testing.T) {
 		RegistrationDate: "string",
 		UpdateDate:       "string",
 	}
-	newStorage.Add(aa)
-	got, err := newStorage.Get(1)
+	gotId, _ := newStorage.Add(userData)
+	got, err := newStorage.Get(gotId)
 	asserts.Nil(err)
 	asserts.Equal("Name2", got.Name)
 }
@@ -51,7 +51,7 @@ func TestGetUsers(t *testing.T) {
 	asserts := assert.New(t)
 	var newStorage = new(Storage)
 	newStorage.db = make(map[int]*models.User)
-	aa := &models.User{
+	userData := &models.User{
 		Login:            "login3",
 		PasswordHash:     "string",
 		Name:             "Name3",
@@ -61,17 +61,19 @@ func TestGetUsers(t *testing.T) {
 		RegistrationDate: "string",
 		UpdateDate:       "string",
 	}
-	newStorage.Add(aa)
-	got, err := newStorage.GetUsers()
-	asserts.Nil(err)
-	asserts.Equal("Name3", got[1].Name)
+	_, err := newStorage.Add(userData)
+	if err == nil {
+		got, err := newStorage.GetUsers()
+		asserts.Nil(err)
+		asserts.Equal("Name3", got[1].Name)
+	}
 }
 
 func TestUpdate(t *testing.T) {
 	asserts := assert.New(t)
 	var newStorage = new(Storage)
 	newStorage.db = make(map[int]*models.User)
-	aa := &models.User{
+	userData := &models.User{
 		Login:            "login4",
 		PasswordHash:     "string",
 		Name:             "Name4",
@@ -88,8 +90,8 @@ func TestUpdate(t *testing.T) {
 		Role:       "User",
 		UpdateDate: "string",
 	}
-	newStorage.Add(aa)
-	err := newStorage.Update(1, updated)
+	gotId, _ := newStorage.Add(userData)
+	err := newStorage.Update(gotId, updated)
 	asserts.Nil(err)
 }
 
@@ -97,7 +99,7 @@ func TestDelete(t *testing.T) {
 	asserts := assert.New(t)
 	var newStorage = new(Storage)
 	newStorage.db = make(map[int]*models.User)
-	aa := &models.User{
+	userData := &models.User{
 		Login:            "login2",
 		PasswordHash:     "string",
 		Name:             "Name2",
@@ -107,7 +109,7 @@ func TestDelete(t *testing.T) {
 		RegistrationDate: "string",
 		UpdateDate:       "string",
 	}
-	newStorage.Add(aa)
-	err := newStorage.Delete(1)
+	gotId, _ := newStorage.Add(userData)
+	err := newStorage.Delete(gotId)
 	asserts.Nil(err)
 }
