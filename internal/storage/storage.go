@@ -2,8 +2,9 @@ package storage
 
 import (
 	"errors"
-	"github.com/Shemistan/Lesson_5/internal/models"
 	"strconv"
+
+	"github.com/Shemistan/Lesson_5/internal/models"
 )
 
 type IStorage interface {
@@ -38,13 +39,17 @@ func (s *Storage) Add(user *models.User) (int, error) {
 	if user == nil {
 		return 0, errors.New("user is nil")
 	}
+
 	s.ids++
+
 	for k, v := range s.db {
 		if v.Login == user.Login {
 			return k, errors.New("the login/user already exists")
 		}
 	}
+
 	s.db[s.ids] = user
+
 	return s.ids, nil
 }
 
@@ -54,6 +59,7 @@ func (s *Storage) Get(userId int) (*models.User, error) {
 		err := errors.New("No user found with id=" + strconv.Itoa(userId))
 		return user, err
 	}
+
 	res := &models.User{
 		Login:            user.Login,
 		Name:             user.Name,
@@ -63,6 +69,7 @@ func (s *Storage) Get(userId int) (*models.User, error) {
 		RegistrationDate: user.RegistrationDate,
 		UpdateDate:       user.UpdateDate,
 	}
+
 	return res, nil
 }
 
@@ -76,6 +83,7 @@ func (s *Storage) Update(userId int, user *models.UserDate) error {
 		err := errors.New("No user found with id=" + strconv.Itoa(userId))
 		return err
 	}
+
 	userInDb.Name = user.Name
 	userInDb.Surname = user.Surname
 	userInDb.Status = user.Status
@@ -89,11 +97,11 @@ func (s *Storage) Delete(userID int) error {
 	_, ok := s.db[userID]
 	if ok {
 		delete(s.db, userID)
-	} else {
-		err := errors.New("No user found with the ID = " + strconv.Itoa(userID))
-		return err
+		return nil
 	}
-	return nil
+
+	err := errors.New("No user found with the ID = " + strconv.Itoa(userID))
+	return err
 }
 
 func NewConnect() *Conn {

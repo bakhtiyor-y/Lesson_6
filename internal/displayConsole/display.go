@@ -2,124 +2,109 @@ package displayConsole
 
 import (
 	"fmt"
-	"github.com/Shemistan/Lesson_5/internal/models"
-	"log"
 	"time"
+
+	"github.com/Shemistan/Lesson_5/internal/models"
 )
 
-func RegistrationDataFromConsole() models.User {
+func RegistrationDataFromConsole() (*models.User, error) {
 	var initialData models.User
+
 	fmt.Println("Please enter login")
 	_, err := fmt.Scan(&initialData.Login)
 	if err != nil {
-		log.Print(err)
+		return nil, err
 	}
 
 	fmt.Println("Please enter password")
 	_, err = fmt.Scan(&initialData.PasswordHash)
 	if err != nil {
-		log.Print(err)
+		return nil, err
 	}
 
 	fmt.Println("Please enter name")
 	_, err = fmt.Scan(&initialData.Name)
 	if err != nil {
-		log.Print(err)
+		return nil, err
 	}
 
 	fmt.Println("Please enter surname")
 	_, err = fmt.Scan(&initialData.Surname)
 	if err != nil {
-		log.Print(err)
+		return nil, err
 	}
-	return initialData
+
+	return &initialData, nil
 }
 
-func GetUserIdFromConsole() int {
+func GetUserIdFromConsole() (int, error) {
 	var userId int
+
 	fmt.Println("Please enter user ID")
 	_, err := fmt.Scan(&userId)
 	if err != nil {
-		log.Print(err)
+		return 0, err
 	}
-	return userId
+
+	return userId, nil
 }
 
-func GetDataFromConsoleToUpdate() (int, *models.UserDate) {
+func GetDataFromConsoleToUpdate() (int, *models.UserDate, error) {
 	var userId int
 	var fromInput string
 	var userData models.UserDate
+
 	fmt.Println("Please, enter user ID")
 	_, err := fmt.Scan(&userId)
 	if err != nil {
-		log.Print(err)
+		return 0, nil, err
 	}
 
 	fmt.Println("Please enter name")
 	_, err = fmt.Scan(&fromInput)
 	if err != nil {
-		log.Print(err)
+		return 0, nil, err
 	}
 	userData.Name = fromInput
 
 	fmt.Println("Please enter surname")
 	_, err = fmt.Scan(&fromInput)
 	if err != nil {
-		log.Print(err)
+		return 0, nil, err
 	}
 	userData.Surname = fromInput
 
 	fmt.Println("Please enter status")
 	_, err = fmt.Scan(&fromInput)
 	if err != nil {
-		log.Print(err)
+		return 0, nil, err
 	}
 	userData.Status = fromInput
 
 	fmt.Println("Please enter role")
 	_, err = fmt.Scan(&fromInput)
 	if err != nil {
-		log.Print(err)
+		return 0, nil, err
 	}
 	userData.Role = fromInput
+
 	userData.UpdateDate = time.Now().Format("01-02-2006 15:04:05")
 
-	return userId, &userData
+	return userId, &userData, nil
 }
 
 func GetDataFromConsoleToDelete() int {
 	var userId int
+
 	fmt.Println("Please, enter user ID")
 	_, err := fmt.Scan(&userId)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	return userId
 }
 
 func Line() {
 	fmt.Println("=============")
 }
-
-//log.Printf("user %v is added: %+v", s.ids, user)
-//jsonStr, err := json.MarshalIndent(s.db, "", "\t")
-//if err != nil {
-//fmt.Printf("Error: %s", err.Error())
-//} else {
-//fmt.Println(string(jsonStr))
-//}
-//fmt.Printf("%v", s.db)
-
-//jsonStr, err := json.MarshalIndent(data, "", "\t")
-//if err != nil {
-//return "", err
-//}
-//fmt.Println("%T", jsonStr)
-//return string(jsonStr), nil
-
-//jsonStr, err := json.MarshalIndent(gotUser, "", "\t")
-//if err != nil {
-//fmt.Printf("Error: %s", err.Error())
-//} else {
-//fmt.Println(string(jsonStr))
-//}

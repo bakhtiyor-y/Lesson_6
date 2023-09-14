@@ -55,6 +55,7 @@ func (a *Api) Update(userId int, user *models.UserDate) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -63,6 +64,7 @@ func (a *Api) Delete(userId int) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

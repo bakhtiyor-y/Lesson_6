@@ -3,8 +3,8 @@ package service
 import (
 	"database/sql"
 	"fmt"
-	"github.com/Shemistan/Lesson_5/internal/converters"
 
+	"github.com/Shemistan/Lesson_5/internal/converters"
 	"github.com/Shemistan/Lesson_5/internal/models"
 	"github.com/Shemistan/Lesson_5/internal/storage"
 )
@@ -58,7 +58,9 @@ func (s *Service) Get(userId int) (*models.User, error) {
 	if err != nil {
 		return res, err
 	}
+
 	s.CounterGet++
+
 	return res, nil
 }
 
@@ -67,7 +69,9 @@ func (s *Service) Update(userId int, user *models.UserDate) error {
 	if err != nil {
 		return err
 	}
+
 	s.CounterUpdate++
+
 	return nil
 }
 
@@ -76,14 +80,19 @@ func (s *Service) Delete(userId int) error {
 	if err != nil {
 		return err
 	}
+
 	s.CounterDelete++
+
 	return nil
 }
 
 func (s *Service) GetUsers() ([][]interface{}, error) {
 	res, _ := s.repo.GetUsers()
+
 	result := converters.MapToSlice(res)
+
 	s.CounterGetUsers++
+
 	return result, nil
 }
 
