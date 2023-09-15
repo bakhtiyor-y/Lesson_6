@@ -16,7 +16,7 @@ type IStorage interface {
 }
 
 type Storage struct {
-	db   map[int]*models.User
+	Db   map[int]*models.User
 	ids  int
 	Host string
 	Port int
@@ -26,7 +26,7 @@ type Storage struct {
 
 func New(host string, port, ttl int, conn *Conn) IStorage {
 	return &Storage{
-		db:   make(map[int]*models.User),
+		Db:   make(map[int]*models.User),
 		ids:  0,
 		Host: host,
 		Port: port,
@@ -42,19 +42,19 @@ func (s *Storage) Add(user *models.User) (int, error) {
 
 	s.ids++
 
-	for k, v := range s.db {
+	for k, v := range s.Db {
 		if v.Login == user.Login {
 			return k, errors.New("the login/user already exists")
 		}
 	}
 
-	s.db[s.ids] = user
+	s.Db[s.ids] = user
 
 	return s.ids, nil
 }
 
 func (s *Storage) Get(userId int) (*models.User, error) {
-	user, ok := s.db[userId]
+	user, ok := s.Db[userId]
 	if !ok {
 		err := errors.New("No user found with id=" + strconv.Itoa(userId))
 		return user, err
@@ -74,11 +74,11 @@ func (s *Storage) Get(userId int) (*models.User, error) {
 }
 
 func (s *Storage) GetUsers() (map[int]*models.User, error) {
-	return s.db, nil
+	return s.Db, nil
 }
 
 func (s *Storage) Update(userId int, user *models.UserDate) error {
-	userInDb, ok := s.db[userId]
+	userInDb, ok := s.Db[userId]
 	if !ok {
 		err := errors.New("No user found with id=" + strconv.Itoa(userId))
 		return err
@@ -94,9 +94,9 @@ func (s *Storage) Update(userId int, user *models.UserDate) error {
 }
 
 func (s *Storage) Delete(userID int) error {
-	_, ok := s.db[userID]
+	_, ok := s.Db[userID]
 	if ok {
-		delete(s.db, userID)
+		delete(s.Db, userID)
 		return nil
 	}
 
@@ -110,22 +110,6 @@ func NewConnect() *Conn {
 
 type Conn struct {
 	val bool
-}
-
-func (c *Conn) Close() error {
-	c.val = false
-	if c.val {
-		return errors.New("failed to close")
-	}
-	return nil
-}
-
-func (c *Conn) Open() error {
-	c.val = true
-	if !c.val {
-		return errors.New("failed to open Conn")
-	}
-	return nil
 }
 
 func (c *Conn) IsClose() bool {
